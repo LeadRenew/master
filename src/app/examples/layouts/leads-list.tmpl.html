@@ -1,0 +1,78 @@
+<div class="md-padding">
+    <h2 class="md-display-1">Leads List</h2>
+    
+    <div layout="row" layout-xs="column" layout-margin>
+        <tri-widget flex title="Orders" content-layout="column" content-layout-align="center">
+            <md-table-container>
+                <table md-table class="md-data-table">
+                    <thead md-head md-order="vm.query.order" md-on-reorder="vm.getUsers">
+                        <tr md-row>
+                            <th md-column md-order-by="date" decend-first>Date</th>
+                            <th md-column md-order-by="buyer">Buyer</th>
+                            <th md-column md-numeric md-order-by="items.length">Items</th>
+                            <th md-column md-order-by="status">Status</th>
+                            <th md-column md-numeric md-order-by="total">Total</th>
+                            <th md-column>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody md-body>
+                        <tr md-row ng-repeat="order in vm.salesData.orders | orderBy: vm.query.order | limitTo: vm.query.limit : (vm.query.page -1) * vm.query.limit">
+                            <td md-cell>{{::order.date | amDateFormat:'MMMM Do YYYY, h:mm:ss a'}}</td>
+                            <td md-cell>{{::order.buyer}}</td>
+                            <td md-cell>{{::order.items.length}}</td>
+                            <td md-cell>
+                                <span class="status" ng-class="'status-' + order.status">
+                                    {{::order.status}}
+                                </span>
+                            </td>
+                            <td md-cell>{{::order.total | currency}}</td>
+                            <td md-cell>
+                                <md-button ng-click="vm.openOrder(order, $event)" class="md-icon-button" aria-label="Open Order">
+                                    <md-icon md-font-icon="zmdi zmdi-search"></md-icon>
+                                </md-button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </md-table-container>
+            <md-table-pagination md-limit="vm.query.limit" md-page="vm.query.page" md-total="{{vm.salesData.orders.length}}" md-page-select></md-table-pagination>
+        </tri-widget>
+    </div>    
+    
+
+    <p>Here is how to make a simple page in triangular.</p>
+
+    <h3 class="md-subheading">Create a ui state</h3>
+
+    <p>First of all in your module config create a state and url for the page to load on.</p>
+
+    <p>Make sure you add the <code>triangular.</code> to the beginning of your state.  This will make ui router add the triangular toolbar, sidebar, etc.</p>
+
+    <div class="md-whiteframe-4dp" layout="column">
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                my-module.config.js
+            </div>
+        </md-toolbar>
+        <div hljs hljs-language="js">
+    (function() {
+        'use strict';
+
+        angular
+            .module('app.my-module')
+            .config(moduleConfig);
+
+        /* @ngInject */
+        function moduleConfig($stateProvider) {
+            $stateProvider
+            .state('triangular.my-page',  {
+                url: '/my-page',
+                templateUrl: 'app/my-module/my-page.tmpl.html'
+            })
+        });
+    })();
+        </div>
+    </div>
+
+    <p>Now when you goto <code>/my-page</code> in your browser you will see the contents of <code>my-page.tmpl.html</code> inside the triangular app layout.</p>
+</div>
